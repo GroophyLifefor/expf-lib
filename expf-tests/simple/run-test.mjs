@@ -4,7 +4,6 @@ import { argv } from 'process';
 const label = argv[2];
 
 async function run() {
-
   console.log(`Running performance test with label: ${label}`);
 
   // Start server

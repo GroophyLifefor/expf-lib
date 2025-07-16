@@ -41,6 +41,7 @@ jobs:
             -v ${{ github.workspace }}:/app \
             -e NODE_VERSION=$NODE_VERSION \
             -e PACKAGE_NAME=$PACKAGE_NAME \
+            -e TEST_DIR=$TEST_DIR \
             muratkirazkaya/perf-runner:latest \
             bash -c "source /root/.nvm/nvm.sh && \
                     nvm install $NODE_VERSION && \

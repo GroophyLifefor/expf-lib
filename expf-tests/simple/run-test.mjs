@@ -1,4 +1,7 @@
 import autocannon from "autocannon";
+import { argv } from 'process';
+
+const label = argv[2];
 
 async function run() {
   // Start server
@@ -6,7 +9,7 @@ async function run() {
   const {
     server,
     url
-  } = await test.default();
+  } = await test.default(label);
 
   try {
     const result = await autocannon({

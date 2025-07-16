@@ -4,9 +4,7 @@ import { pathToFileURL } from 'url';
 export default async function (label) {
   let lib;
   if (label === 'candidate') {
-    const indexJsAbsolutePath = path.resolve(process.cwd(), 'index.js');
-    const indexJsFileUrl = pathToFileURL(indexJsAbsolutePath).href;
-    lib = await import(indexJsFileUrl);
+    lib = await import(pathToFileURL('/app/index.js').href);
   } else if (label === 'latest') {
     lib = await import('perf-test-lib');
   } else {

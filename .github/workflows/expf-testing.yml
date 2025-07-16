@@ -34,7 +34,7 @@ jobs:
       - name: Run perf-runner tests on Node.js ${{ matrix.node-version }}
         env:
           NODE_VERSION: ${{ matrix.node-version }}
-          PACKAGE_NAME: perf-test-lib
+          PACKAGE_NAME: simple
           TEST_DIR: "expf-tests"
         run: |
           docker run --rm \

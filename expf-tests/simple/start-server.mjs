@@ -1,4 +1,3 @@
-import path from 'path';
 import { pathToFileURL } from 'url';
 
 export default async function (label) {
@@ -19,5 +18,6 @@ export default async function (label) {
   await new Promise((resolve) => server.listen(3000, resolve));
   const url = 'http://localhost:3000';
   console.log(`Server is running at ${url}`);
+
   return { url, server };
 }

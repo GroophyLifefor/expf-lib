@@ -1,0 +1,48 @@
+name: Performance Test
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  perf-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18,19,20,21,22,23,24]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Build (optional)
+        run: npm install
+
+      - name: Pull perf-runner image
+        run: docker pull muratkirazkaya/perf-runner:latest
+
+      - name: Run perf-runner tests on Node.js ${{ matrix.node-version }}
+        env:
+          NODE_VERSION: ${{ matrix.node-version }}
+          PACKAGE_NAME: perf-test-lib
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # for commenting results if you want
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/app \
+            -e NODE_VERSION=$NODE_VERSION \
+            -e PACKAGE_NAME=$PACKAGE_NAME \
+            muratkirazkaya/perf-runner:latest \
+            bash -c "source /root/.nvm/nvm.sh && \
+                     nvm install $NODE_VERSION && \
+                     nvm use $NODE_VERSION && \
+                     node run-tests.mjs"

@@ -7,13 +7,13 @@ export default async function (label) {
     const indexJsAbsolutePath = path.resolve(process.cwd(), 'index.js');
     const indexJsFileUrl = pathToFileURL(indexJsAbsolutePath).href;
     lib = await import(indexJsFileUrl);
-  } else if (label === 'lastest') {
+  } else if (label === 'latest') {
     lib = await import('perf-test-lib');
   } else {
     throw new Error(`Unknown label: ${label}`);
   }
 
-  const server = lib.createServer((req, res) => {
+  const server = lib.http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Hello, world!\n');
   });

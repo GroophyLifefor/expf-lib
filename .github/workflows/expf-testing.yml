@@ -42,7 +42,7 @@ jobs:
           REPOSITORY_OWNER: ${{ github.repository_owner }}
           REPOSITORY: ${{ github.event.repository.name }}
           PR_ID: ${{ github.event.pull_request.number || '' }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/app \
@@ -50,7 +50,7 @@ jobs:
             -e PACKAGE_NAME=$PACKAGE_NAME \
             -e TEST_DIR=$TEST_DIR \
             -e PR_ID=$PR_ID \
-            -e GITHUB_TOKEN=$GITHUB_TOKEN \
+            -e GITHUB_TOKEN=$TOKEN \
             -e REPOSITORY_OWNER=$REPOSITORY_OWNER \
             -e REPOSITORY=$REPOSITORY \
             muratkirazkaya/perf-runner:latest \

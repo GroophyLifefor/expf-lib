@@ -57,5 +57,5 @@ jobs:
             bash -c "source /root/.nvm/nvm.sh && \
                     nvm install $NODE_VERSION && \
                     nvm use $NODE_VERSION && \
-                    npm install -g autocannon && \
+                    npm install -g autocannon octokit && \
                     node run-tests.mjs"

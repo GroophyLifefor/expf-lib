@@ -15,7 +15,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18, 19, 20, 21, 22, 23, 24]
+        # For lower Actions usage, I just run one
+        # [18, 19, 20, 21, 22, 23, 24]
+        node-version: [22]
 
     steps:
       - name: Checkout code

@@ -12,8 +12,6 @@ export default async function (label) {
 
   // Example middleware function
   function middleware(req, res, next) {
-    // You can add logging, authentication, etc. here
-    console.log(`Request: ${req.method} ${req.url}`);
     next();
   }
 

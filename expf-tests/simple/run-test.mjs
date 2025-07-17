@@ -21,6 +21,11 @@ async function run() {
     });
 
     console.log(autocannon.printResult(result));
+    console.log('Raw Data');
+    console.log('---start:expf-autocanon-data---');
+    console.log(JSON.stringify(result, null, 2));
+    console.log('---end:expf-autocanon-data---');
+
   } catch (err) {
     console.error("Autocannon error:", err);
   } finally {

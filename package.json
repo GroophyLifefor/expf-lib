@@ -4,7 +4,8 @@
   "main": "index.js",
    "type": "module",  
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "act": "SET IS_ACT=true && act"
   },
   "dependencies": {
     "autocannon": "^8.0.0"

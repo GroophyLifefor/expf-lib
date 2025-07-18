@@ -43,9 +43,27 @@ jobs:
           REPOSITORY: ${{ github.event.repository.name }}
           PR_ID: ${{ github.event.pull_request.number || '' }}
           COMMENTTOKEN: ${{ secrets.COMMENTTOKEN }}
+          IS_ACT: ${{ env.ACT || 'false' }}
         run: |
+          if [ "$IS_ACT" = "true" ]; then
+            MOUNT="-v $(pwd):/app"
+            ENTRY="node /runner/run-tests.mjs"
+            PWD="$(pwd)"
+            PREFIX_PATH_COMMAND="-e PATH_PREFIX=$(pwd)"
+          else
+            MOUNT="-v ${{ github.workspace }}:/app"
+            ENTRY="node run-tests.mjs"
+            PWD="${{ github.workspace }}"
+            PREFIX_PATH_COMMAND=""
+          fi
+
+          echo MOUNT: $MOUNT
+          echo ENTRY: $ENTRY
+          echo PREFIX_PATH_COMMAND: $PREFIX_PATH_COMMAND
+          echo PWD: $PWD
+
           docker run --rm \
-            -v ${{ github.workspace }}:/app \
+            $MOUNT \
             -e NODE_VERSION=$NODE_VERSION \
             -e PACKAGE_NAME=$PACKAGE_NAME \
             -e TEST_DIR=$TEST_DIR \
@@ -53,9 +71,15 @@ jobs:
             -e COMMENTTOKEN=$COMMENTTOKEN \
             -e REPOSITORY_OWNER=$REPOSITORY_OWNER \
             -e REPOSITORY=$REPOSITORY \
+            $PREFIX_PATH_COMMAND \
             muratkirazkaya/perf-runner:latest \
             bash -c "source /root/.nvm/nvm.sh && \
                     nvm install $NODE_VERSION && \
                     nvm use $NODE_VERSION && \
-                    npm install -g autocannon && \
-                    node run-tests.mjs"
+                    npm install -g autocannon && \-
+                    echo IS_ACT: $IS_ACT && \
+                    echo ls pwd
+                    ls -la $PWD && \
+                    echo ls pwd/test-dir
+                    ls -la $PWD/$TEST_DIR && \
+                    $ENTRY"

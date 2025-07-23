@@ -39,7 +39,7 @@ class PerfTest {
       (req, res, next) => next()
     );
 
-    this.server = lib.http.createServer((req, res) => {
+    this.server = this.lib.http.createServer((req, res) => {
       runMiddleware(req, res, middlewares, (req, res) => {
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end('Hello, world!\n');

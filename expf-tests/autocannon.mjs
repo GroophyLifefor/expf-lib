@@ -11,7 +11,6 @@ class PerfTestTemplate {
     this.lib = null;
 
     console.log(`Running performance test with label: ${label}`);
-    sayHello();
   }
 
   async loadLib() {

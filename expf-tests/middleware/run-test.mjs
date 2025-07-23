@@ -87,10 +87,20 @@ const label = argv[2];
 const test = new PerfTest(label, {
   port: 3000,
 });
-test.start();
-const data = test.run();
-test.report(data);
-test.stop();
+
+(async () => {
+  try {
+    await test.start();
+    const data = await test.run();
+    await test.report(data);
+    await test.stop();
+  } catch (error) {
+    console.error('Test execution error:', error);
+    await test.stop();
+    process.exit(1);
+  }
+})();
+
 /*
 import autocannon from 'autocannon';
 import { argv } from 'process';

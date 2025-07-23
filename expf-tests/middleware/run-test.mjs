@@ -1,18 +1,101 @@
-import autocannon from "autocannon";
+import autocannon from 'autocannon';
 import { argv } from 'process';
+import { pathToFileURL } from 'url';
+
+class PerfTest {
+  constructor(label, config) {
+    this.label = label;
+    this.server = null;
+    this.config = config;
+    this.url = `http://localhost:${config.port}`;
+    this.lib = null;
+
+    console.log(`Running performance test with label: ${label}`);
+  }
+
+  async start() {
+    if (this.label === 'candidate') {
+      this.lib = await import(pathToFileURL('/app/index.js').href);
+    } else if (label === 'latest') {
+      this.lib = await import('perf-test-lib');
+    } else {
+      throw new Error(`Unknown label: ${this.label}`);
+    }
+
+    function runMiddleware(req, res, middlewares, handler) {
+      let i = 0;
+      function next() {
+        if (i < middlewares.length) {
+          middlewares[i++](req, res, next);
+        } else {
+          handler(req, res);
+        }
+      }
+      next();
+    }
+
+    const middlewareCount = 5; // Number of middleware functions to run
+    const middlewares = Array.from({ length: middlewareCount }).fill(
+      (req, res, next) => next()
+    );
+
+    this.server = lib.http.createServer((req, res) => {
+      runMiddleware(req, res, middlewares, (req, res) => {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end('Hello, world!\n');
+      });
+    });
+
+    await new Promise((resolve) => server.listen(this.config.port, resolve));
+    console.log(`Server is running at ${this.url}`);
+  }
+
+  async run() {
+    /* autocannon */
+    try {
+      const result = await autocannon({
+        url: this.url,
+        connections: 10,
+        duration: 5,
+      });
+
+      console.log(autocannon.printResult(result));
+      return result;
+    } catch (err) {
+      console.error('Autocannon error:', err);
+    }
+  }
+  async report(result) {
+    /* format + send */
+    console.log('Raw Data');
+    console.log('---start:expf-autocanon-data---');
+    console.log(JSON.stringify(result, null, 2));
+    console.log('---end:expf-autocanon-data---');
+  }
+  async stop() {
+    if (this.server) {
+      this.server.close(() => {
+        console.log('Server closed');
+      });
+    } else {
+      console.warn('No server to close');
+    }
+  }
+}
 
 const label = argv[2];
+const test = new PerfTest(label, {
+  port: 3000,
+});
+test.start();
+const data = test.run();
+test.report(data);
+test.stop();
+/*
+import autocannon from 'autocannon';
+import { argv } from 'process';
 
 async function run() {
-  console.log(`Running performance test with label: ${label}`);
-
-  // Start server
-  const test = await import('./start-server.mjs');
-  const {
-    server,
-    url
-  } = await test.default(label);
-
   try {
     const result = await autocannon({
       url,
@@ -25,12 +108,12 @@ async function run() {
     console.log('---start:expf-autocanon-data---');
     console.log(JSON.stringify(result, null, 2));
     console.log('---end:expf-autocanon-data---');
-
   } catch (err) {
-    console.error("Autocannon error:", err);
+    console.error('Autocannon error:', err);
   } finally {
     server.close();
   }
 }
 
 run();
+*/

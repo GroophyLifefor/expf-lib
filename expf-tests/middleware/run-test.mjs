@@ -1,6 +1,7 @@
 import autocannon from 'autocannon';
 import { argv } from 'process';
 import { pathToFileURL } from 'url';
+import { sayHello } from './templates/autocannon.mjs';
 
 class PerfTest {
   constructor(label, config) {
@@ -11,6 +12,7 @@ class PerfTest {
     this.lib = null;
 
     console.log(`Running performance test with label: ${label}`);
+    sayHello(); 
   }
 
   async start() {
@@ -100,30 +102,3 @@ const test = new PerfTest(label, {
     process.exit(1);
   }
 })();
-
-/*
-import autocannon from 'autocannon';
-import { argv } from 'process';
-
-async function run() {
-  try {
-    const result = await autocannon({
-      url,
-      connections: 10,
-      duration: 5,
-    });
-
-    console.log(autocannon.printResult(result));
-    console.log('Raw Data');
-    console.log('---start:expf-autocanon-data---');
-    console.log(JSON.stringify(result, null, 2));
-    console.log('---end:expf-autocanon-data---');
-  } catch (err) {
-    console.error('Autocannon error:', err);
-  } finally {
-    server.close();
-  }
-}
-
-run();
-*/

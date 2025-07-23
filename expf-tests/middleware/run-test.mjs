@@ -46,7 +46,7 @@ class PerfTest {
       });
     });
 
-    await new Promise((resolve) => server.listen(this.config.port, resolve));
+    await new Promise((resolve) => this.server.listen(this.config.port, resolve));
     console.log(`Server is running at ${this.url}`);
   }
 

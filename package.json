@@ -2,11 +2,8 @@
   "name": "perf-test-lib",
   "version": "1.0.0",
   "main": "index.js",
-   "type": "module",  
+  "type": "module",
   "scripts": {
     "start": "node index.js"
-  },
-  "dependencies": {
-    "autocannon": "^8.0.0"
   }
 }

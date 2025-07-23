@@ -1,0 +1,9 @@
+{
+  "name": "perf-test-lib---test-middleware",
+  "version": "1.0.0",
+  "main": "run-test.mjs",
+  "type": "module",
+  "dependencies": {
+    "autocannon": "^8.0.0"
+  }
+}
